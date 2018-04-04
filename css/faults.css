@@ -1,0 +1,9 @@
+#buildingjqxcombobox {	
+	display: block;
+	padding: 5px 5px 10px 5px;
+	float: left;
+}
+#locationjqxcombobox {float: left;}
+#unitjqxcombobox {float: left;}
+#faultcategoryjqxcombobox {float: left;}
+
