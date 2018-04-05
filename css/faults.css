@@ -7,3 +7,12 @@
 #unitjqxcombobox {float: left;}
 #faultcategoryjqxcombobox {float: left;}
 
+#GetPendingFaults { 
+	float: left; 
+	margin: 10px 10px 10px 0;
+}
+
+#ProcessPendingFaults { 
+	float: left; 
+	margin: 10px 10px 10px 0;
+}
