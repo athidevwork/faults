@@ -1,6 +1,40 @@
  // The root URL for the RESTful services
 var rootURL = "http://54.215.186.133:20001/fault";
 
+function loginUser (user) {
+	var restUrl = rootURL + '/creuser/validate';
+
+	$.ajax({
+	    url: restUrl,
+	    data: request,
+	    type: 'POST',
+	    /*method: request.method,
+	    dataType: request.dataType ||"json",
+	    crossDomain: true,
+	    //dataType: 'jsonp',
+	    contentType: request.contentType || "application/json; charset=utf-8",
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type,X-Requested-With',
+            'Access-Control-Allow-Methods': 'GET,POST,PUT,HEAD,DELETE,OPTIONS'
+        },
+        enctype: 'multipart/form-data',
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,  // tell jQuery not to set contentType*/
+	    success: function(response) {
+	    	console.log(response);
+	    	//document.getElementById('jqxTextAreaResponse').innerHTML = response;
+	    	//$('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(response));
+	    },
+	    beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+	    },
+	    error: function(xhr) {
+	    	console.log ("Failure occurred during processing request : " + xhr);
+	    }
+	});		
+}
+
 function sendFaultRequest(request) {
 	var restUrl = rootURL + '/save';
 	
@@ -55,7 +89,7 @@ function getFaults() {
 	});	
 }
 
-function setupFaultsGrid() {
+function setupGetAllFaultsGrid() {
 	var restUrl = rootURL + '/faults';
 	console.log('Url : ' + restUrl);
 	
@@ -159,6 +193,68 @@ function setupFaultsGrid() {
         $('#cellendeditevent').text('Event Type: cellendedit, Column: ' + args.datafield + ', Row: ' + (1 + args.rowindex) + ', Value: ' + args.value);
     });*/        	
 }
+
+function setupPendingFaultsGrid() {
+	var restUrl = rootURL + '/pending/faults';
+	console.log('Url : ' + restUrl);
+	
+    //get data from web service and add to grid
+  	//Initializing the source property
+    source = {
+        datatype: 'json',
+        datafields: [
+            { name: 'id', type: 'number' },
+            { name: 'startDate', type: 'string' },
+            { name: 'endDate', type: 'string' },
+            { name: 'category', type: 'string' },
+            { name: 'subCategory', type: 'string' },
+            { name: 'description', type: 'string' },
+            { name: 'fSignature', type: 'string' },
+            { name: 'aibcStatus', type: 'string' },
+            { name: 'process', type: 'bool' }
+            ]
+    };
+    //Getting the source data with ajax GET request
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        async: false,
+        url: restUrl,
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+        	source.localdata = data;
+        },
+        error: function (err) {
+        	alert('Error');
+        }
+    });
+    
+    //Preparing the data for use
+    var dataAdapter = new $.jqx.dataAdapter(source);
+
+    // initialize jqxGrid
+    $('#jqxPendingFaultsgrid').jqxGrid(
+    {
+        width: 1250,
+        source: dataAdapter,
+        editable: true,
+        enabletooltips: true,
+        selectionmode: 'multiplecellsadvanced',
+        columns: [
+            { text: 'ID', columntype: 'textbox', datafield: 'id', width: 30 },
+            { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 170 },
+            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 170 },
+            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 160 },
+            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 160 },
+            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 200 },
+            { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 200 },
+            { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 },
+            { text: 'Process', datafield: 'process', columntype: 'checkbox', width: 67 },
+        ]
+    });        	
+}
+
 
 function setupExampleGrid() {
 	// prepare the data

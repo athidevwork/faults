@@ -286,7 +286,12 @@
             
             $('#GetFaults').on('click', function (event) {
             	//getFaults();
-    			setupFaultsGrid();  
+            	setupGetAllFaultsGrid(); 
+            });
+
+            $('#GetPendingFaults').on('click', function (event) {
+            	//getFaults();
+            	setupPendingFaultsGrid(); 
             });
             
             // Create jqxTooltip Request
@@ -369,6 +374,10 @@
 		<button class="btn-primary" id="GetPendingFaults">Get Pending Faults</button> 
 		<p></p>
 		<button class="btn-primary" id="ProcessPendingFaults">Process Pending Faults</button> 
+		<p></p>
+		<div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
+			<div id="jqxPendingFaultsgrid"></div>
+		</div>	
 		<p></p>
     </div>
     <div>
