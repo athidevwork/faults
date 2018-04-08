@@ -35,8 +35,15 @@ function loginUser (user) {
 	});		
 }
 
-function sendFaultRequest(request) {
-	var restUrl = rootURL + '/save';
+function sendFaultRequest(request, mode) {
+	var restUrl;
+	
+	if (mode == 'create')
+		restUrl = rootURL + '/create';
+	else
+		restUrl = rootURL + '/save';
+	
+	console.log ('Url : ' + restUrl);
 	
 	$.ajax({
 	    url: restUrl,
@@ -47,14 +54,15 @@ function sendFaultRequest(request) {
 	    crossDomain: true,
 	    //dataType: 'jsonp',
 	    contentType: request.contentType || "application/json; charset=utf-8",
-        headers: {
+	    //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        /*headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Requested-With',
+            'Access-Control-Allow-Headers': 'Authorization,Content-Type,X-Requested-With',
             'Access-Control-Allow-Methods': 'GET,POST,PUT,HEAD,DELETE,OPTIONS'
-        },
+        },*/
         enctype: 'multipart/form-data',
-        processData: false,  // tell jQuery not to process the data
-        contentType: false,  // tell jQuery not to set contentType
+        //processData: false,  // tell jQuery not to process the data
+        //contentType: false,  // tell jQuery not to set contentType
 	    success: function(response) {
 	    	console.log(response);
 	    	//document.getElementById('jqxTextAreaResponse').innerHTML = response;
@@ -89,6 +97,74 @@ function getFaults() {
 	});	
 }
 
+function setupGetUnitFaultsGrid(building, location, unit) {
+	console.log('building : ' + building + ', location : ' + location + ', unit : ' + unit);
+	//http://54.215.186.133:20001/fault/assets/buildinglocationandunit?building=Building 4&location=4th floor&unit=444
+	var restUrl = rootURL + '/assets/buildinglocationandunit?building='+building+'&location='+location+'&unit='+unit;
+	console.log('Url : ' + restUrl);
+	
+    //get data from web service and add to grid
+	var respdata = new Array();
+	
+  	//Initializing the source property
+    source = {
+        datatype: 'json',
+    	root: "faults",
+        datafields: [
+            { name: 'id', type: 'number' },
+            { name: 'startDate', type: 'string' },
+            { name: 'endDate', type: 'string' },
+            { name: 'category', type: 'string' },
+            { name: 'subCategory', type: 'string' },
+            { name: 'description', type: 'string' },
+            { name: 'fSignature', type: 'string' },
+            { name: 'aibcStatus', type: 'string' },
+            { name: 'aibcTrans', type: 'string' }
+        ]
+    };
+    //Getting the source data with ajax GET request
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        async: false,
+        url: restUrl,
+        cache: false,
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+        	source.localdata = data;
+            //alert('source : ' + source.localdata);
+        },
+        error: function (err) {
+        	alert('Error');
+        }
+    });
+    
+    //Preparing the data for use
+    var dataAdapter = new $.jqx.dataAdapter(source);
+
+    // initialize jqxGrid
+    $('#jqxUnitFaultsgrid').jqxGrid(
+    {
+        width: 1250,
+        source: dataAdapter,
+        editable: true,
+        enabletooltips: true,
+        sortable: true,
+        selectionmode: 'multiplecellsadvanced',
+        columns: [
+            { text: 'ID', columntype: 'textbox', datafield: 'id', width: 30 },
+            { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 160 },
+            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 160 },
+            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 150 },
+            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 150 },
+            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 175 },
+            { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 200 },
+            { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 },
+            { text: 'Blockchain Transaction', columntype: 'dropdownlist', datafield: 'aibcTrans', width: 100 }
+        ]
+    });       	
+}
+
 function setupGetAllFaultsGrid() {
 	var restUrl = rootURL + '/faults';
 	console.log('Url : ' + restUrl);
@@ -105,7 +181,8 @@ function setupGetAllFaultsGrid() {
             { name: 'subCategory', type: 'string' },
             { name: 'description', type: 'string' },
             { name: 'fSignature', type: 'string' },
-            { name: 'aibcStatus', type: 'string' }	            
+            { name: 'aibcStatus', type: 'string' },
+            { name: 'aibcTrans', type: 'string' }
             ]
     };
     //Getting the source data with ajax GET request
@@ -134,16 +211,18 @@ function setupGetAllFaultsGrid() {
         source: dataAdapter,
         editable: true,
         enabletooltips: true,
+        sortable: true,        
         selectionmode: 'multiplecellsadvanced',
         columns: [
             { text: 'ID', columntype: 'textbox', datafield: 'id', width: 30 },
-            { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 170 },
-            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 170 },
-            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 160 },
-            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 160 },
-            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 200 },
+            { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 145 },
+            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 145 },
+            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 145 },
+            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 150 },
+            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 175 },
             { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 200 },
-            { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 }
+            { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 },
+            { text: 'Blockchain Transaction', columntype: 'dropdownlist', datafield: 'aibcTrans', width: 200 }
             /*{ text: 'Available', datafield: 'available', columntype: 'checkbox', width: 67 },
             { text: 'Ship Date', datafield: 'date', columntype: 'datetimeinput', width: 110, align: 'right', cellsalign: 'right', cellsformat: 'd',
 	            validation: function (cell, value) {
@@ -203,6 +282,7 @@ function setupPendingFaultsGrid() {
     source = {
         datatype: 'json',
         datafields: [
+            { name: 'process', type: 'bool' },        	
             { name: 'id', type: 'number' },
             { name: 'startDate', type: 'string' },
             { name: 'endDate', type: 'string' },
@@ -211,7 +291,7 @@ function setupPendingFaultsGrid() {
             { name: 'description', type: 'string' },
             { name: 'fSignature', type: 'string' },
             { name: 'aibcStatus', type: 'string' },
-            { name: 'process', type: 'bool' }
+            { name: 'aibcTrans', type: 'string' },
             ]
     };
     //Getting the source data with ajax GET request
@@ -238,21 +318,47 @@ function setupPendingFaultsGrid() {
     {
         width: 1250,
         source: dataAdapter,
-        editable: true,
+        editable: false,
         enabletooltips: true,
-        selectionmode: 'multiplecellsadvanced',
+        sortable: true,
+        //filterable: true,
+        //autoshowfiltericon: true,
+        selectionmode: 'singlecell',
+        editmode: 'click’',
+        //selectionmode: 'multiplecellsadvanced',
         columns: [
+            { text: '', datafield: 'process', columntype: 'checkbox', width: 30, editable: true },        	
             { text: 'ID', columntype: 'textbox', datafield: 'id', width: 30 },
-            { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 170 },
-            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 170 },
-            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 160 },
-            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 160 },
-            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 200 },
-            { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 200 },
+            { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 140 },
+            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 140 },
+            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 140 },
+            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 140 },
+            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 150 },
+            { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 150 },
             { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 },
-            { text: 'Process', datafield: 'process', columntype: 'checkbox', width: 67 },
+            { text: 'Blockchain Transaction', columntype: 'dropdownlist', datafield: 'aibcTrans', width: 150 },
         ]
-    });        	
+    });
+    
+ // select or unselect rows when the checkbox is clicked.
+    $("#jqxPendingFaultsgrid").bind('cellendedit', function (event) {
+        if (event.args.value) {
+            $("#jqxPendingFaultsgrid").jqxGrid('selectrow', event.args.rowindex);
+        }
+        else {
+            $("#jqxPendingFaultsgrid").jqxGrid('unselectrow', event.args.rowindex);
+        }
+    });
+    // get all selected records.
+    $("#ProcessPendingFaults").click(function () {
+        var rows = $("#jqxPendingFaultsgrid").jqxGrid('selectedrowindexes');
+        var selectedRecords = new Array();
+        for (var m = 0; m < rows.length; m++) {
+            var row = $("#jqxPendingFaultsgrid").jqxGrid('getrowdata', rows[m]);
+            selectedRecords[selectedRecords.length] = row;
+        }
+        console.log('selected rows :' + selectedRecords);
+    });    
 }
 
 

@@ -56,16 +56,16 @@
 <script type="text/javascript" src="../css/jqwidgets/jqxlistbox.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxdropdownlist.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxgrid.js"></script>
-<script type="text/javascript" src="../css/jqwidgets/jqxgrid.selection.js"></script>
-<script type="text/javascript" src="../css/jqwidgets/jqxgrid.columnsresize.js"></script>
+<script type="text/javascript"
+	src="../css/jqwidgets/jqxgrid.selection.js"></script>
+<script type="text/javascript"
+	src="../css/jqwidgets/jqxgrid.columnsresize.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxgrid.filter.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxgrid.sort.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxgrid.pager.js"></script>
-<script type="text/javascript" src="../css/jqwidgets/jqxgrid.edit.js"></script>  
-<script type="text/javascript" src="../css/jqwidgets/jqxgrid.selection.js"></script> 
-<script type="text/javascript" src="../css/jqwidgets/jqxgrid.grouping.js"></script>
+<script type="text/javascript"
+	src="../css/jqwidgets/jqxgrid.grouping.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxgrid.edit.js"></script>
-<script type="text/javascript" src="../css/jqwidgets/jqxgrid.filter.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxtextarea.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxtooltip.js"></script>
 <script type="text/javascript" src="../css/jqwidgets/jqxtabs.js"></script>
@@ -78,7 +78,7 @@
 </script>
 
 <body>
-	<a id="homepage" href="../index.html">Home</a>
+	<a id="homepage" href="../index.html">Home Page</a>
 	<!--<script src="js/utils.js"></script>-->
 	<script src="../js/restclient.js"></script>
 
@@ -121,9 +121,9 @@
                 "Liqueur coffee"
             ];*/
            
-            $('#jqxTabs').jqxTabs({ width: 1250, height: 950, theme: 'summer' });           
+            $('#jqxTabs').jqxTabs({ width: 1250, height: 550, theme: 'summer' });            
             $('#jqxTabs').jqxTabs('disableAt', 3);
-            $('#jqxTabs').jqxTabs('disableAt', 4);            
+            $('#jqxTabs').jqxTabs('disableAt', 4);             
             
             var buildingSource = [
                 "Building_1",
@@ -281,25 +281,12 @@
                 console.log(JSON.stringify(fault));
                 $('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(fault));
                 //send a rest client request
-            	sendFaultRequest(JSON.stringify(fault), 'create');
-            });
-
-            $('#GetFaultsByBuildingLocationUnit').on('click', function (event) {
-            	//alert ("not yet implemented");
-            	setupGetUnitFaultsGrid(building.label, location.label, unit.label); 
-            	//getFaults();
-    			//setupGetAllFaultsGrid();  
-            });
- 
-            $('#clear').on('click', function (event) {
-                $('#jqxUnitFaultsgrid').jqxGrid('clear');
-                //.jqxGrid('setGridParam', {data: data, datatype: 'json'})
-                //.trigger('reloadGrid');
+            	sendFaultRequest(JSON.stringify(fault));
             });
             
             $('#GetFaults').on('click', function (event) {
             	//getFaults();
-    			setupGetAllFaultsGrid();  
+            	setupGetAllFaultsGrid(); 
             });
 
             $('#GetPendingFaults').on('click', function (event) {
@@ -333,24 +320,16 @@
         $( ".button-color button" ).button();
     });*/
 </script>
-	<div id='jqxTabs'>
-	    <ul style='margin-left: 20px;'>
-	        <li>Create Fault</li>
-	        <li>Get Faults</li>
-        	<li>Process Faults</li>
-	        <li>Tab 4</li>
-	        <li>Tab 5</li>
-	    </ul>
+<div id='jqxTabs'>
+    <ul style='margin-left: 20px;'>
+        <li>Create Fault</li>
+        <li>Get Faults</li>
+        <li>Process Faults</li>
+        <li>Tab 4</li>
+        <li>Tab 5</li>
+    </ul>
     <div>
         <!--  Content 1 -->
-        <p></p>
-		<button class="btn-primary" id="GetFaultsByBuildingLocationUnit">Get Faults for Unit</button>  
-		<button class="btn-primary" id="clear">Clear</button>  		
-        <div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
-			<div id="jqxUnitFaultsgrid"></div>
-		</div>	
-		<p></p>			
-		<p></p>          
 		<div id='buildingjqxcombobox'></div>
 		<p></p>
 		<div id='locationjqxcombobox'></div>
@@ -390,6 +369,7 @@
 		<p></p>-->
     </div>
     <div>
+        <!-- Process Faults -->
         <p></p>
 		<button class="btn-primary" id="GetPendingFaults">Get Pending Faults</button> 
 		<p></p>

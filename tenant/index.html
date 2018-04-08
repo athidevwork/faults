@@ -121,7 +121,7 @@
                 "Liqueur coffee"
             ];*/
            
-            $('#jqxTabs').jqxTabs({ width: 1250, height: 550, theme: 'summer' });
+            $('#jqxTabs').jqxTabs({ width: 1250, height: 950, theme: 'summer' });
             $('#jqxTabs').jqxTabs('disableAt', 2);            
             $('#jqxTabs').jqxTabs('disableAt', 3);
             $('#jqxTabs').jqxTabs('disableAt', 4);            
@@ -282,7 +282,20 @@
                 console.log(JSON.stringify(fault));
                 $('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(fault));
                 //send a rest client request
-            	sendFaultRequest(JSON.stringify(fault));
+            	sendFaultRequest(JSON.stringify(fault), 'create');
+            });
+
+            $('#GetFaultsByBuildingLocationUnit').on('click', function (event) {
+            	//alert ("not yet implemented");
+            	setupGetUnitFaultsGrid(building.label, location.label, unit.label); 
+            	//getFaults();
+    			//setupGetAllFaultsGrid();  
+            });
+ 
+            $('#clear').on('click', function (event) {
+                $('#jqxUnitFaultsgrid').jqxGrid('clear');
+                //.jqxGrid('setGridParam', {data: data, datatype: 'json'})
+                //.trigger('reloadGrid');
             });
             
             $('#GetFaults').on('click', function (event) {
@@ -326,6 +339,14 @@
 	    </ul>
     <div>
         <!--  Content 1 -->
+        <p></p>
+		<button class="btn-primary" id="GetFaultsByBuildingLocationUnit">Get Faults for Unit</button>  
+		<button class="btn-primary" id="clear">Clear</button>  		
+        <div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
+			<div id="jqxUnitFaultsgrid"></div>
+		</div>	
+		<p></p>			
+		<p></p>          
 		<div id='buildingjqxcombobox'></div>
 		<p></p>
 		<div id='locationjqxcombobox'></div>
