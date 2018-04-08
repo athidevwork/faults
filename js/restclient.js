@@ -1,13 +1,18 @@
  // The root URL for the RESTful services
 var rootURL = "http://54.215.186.133:20001/fault";
 
-function loginUser (user) {
+function loginUser (request) {
 	var restUrl = rootURL + '/creuser/validate';
 
 	$.ajax({
 	    url: restUrl,
 	    data: request,
 	    type: 'POST',
+	    method: request.method,
+	    dataType: request.dataType ||"json",
+	    crossDomain: true,
+	    //dataType: 'jsonp',
+	    contentType: request.contentType || "application/json; charset=utf-8",
 	    /*method: request.method,
 	    dataType: request.dataType ||"json",
 	    crossDomain: true,
@@ -25,12 +30,13 @@ function loginUser (user) {
 	    	console.log(response);
 	    	//document.getElementById('jqxTextAreaResponse').innerHTML = response;
 	    	//$('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(response));
+	    	jQuery(window).redirect("http://stackoverflow.com/");
 	    },
-	    beforeSend: function(xhr) {
+	    /*beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-	    },
+	    },*/
 	    error: function(xhr) {
-	    	console.log ("Failure occurred during processing request : " + xhr);
+	    	console.log ("Failure occurred during processing user validation request : " + xhr);
 	    }
 	});		
 }
@@ -40,6 +46,8 @@ function sendFaultRequest(request, mode) {
 	
 	if (mode == 'create')
 		restUrl = rootURL + '/create';
+	else if (mode == 'process')
+		restUrl = rootURL + '/process';	
 	else
 		restUrl = rootURL + '/save';
 	
@@ -282,7 +290,7 @@ function setupPendingFaultsGrid() {
     source = {
         datatype: 'json',
         datafields: [
-            { name: 'process', type: 'bool' },        	
+            { name: 'available', type: 'bool' },        	
             { name: 'id', type: 'number' },
             { name: 'startDate', type: 'string' },
             { name: 'endDate', type: 'string' },
@@ -291,7 +299,7 @@ function setupPendingFaultsGrid() {
             { name: 'description', type: 'string' },
             { name: 'fSignature', type: 'string' },
             { name: 'aibcStatus', type: 'string' },
-            { name: 'aibcTrans', type: 'string' },
+            /*{ name: 'aibcTrans', type: 'string' },*/
             ]
     };
     //Getting the source data with ajax GET request
@@ -318,16 +326,20 @@ function setupPendingFaultsGrid() {
     {
         width: 1250,
         source: dataAdapter,
-        editable: false,
+        editable: true,
         enabletooltips: true,
         sortable: true,
+        ready: function () {
+            $("#jqxPendingFaultsgrid").jqxGrid('selectrow', 0);
+        },
+        theme: 'energyblue',        
         //filterable: true,
         //autoshowfiltericon: true,
-        selectionmode: 'singlecell',
+        //selectionmode: 'singlecell',
         editmode: 'click’',
-        //selectionmode: 'multiplecellsadvanced',
+        selectionmode: 'multiplecellsadvanced',
         columns: [
-            { text: '', datafield: 'process', columntype: 'checkbox', width: 30, editable: true },        	
+            { text: '', datafield: 'available', columntype: 'checkbox', width: 30 },        	
             { text: 'ID', columntype: 'textbox', datafield: 'id', width: 30 },
             { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 140 },
             { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 140 },
@@ -336,28 +348,56 @@ function setupPendingFaultsGrid() {
             { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 150 },
             { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 150 },
             { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 },
-            { text: 'Blockchain Transaction', columntype: 'dropdownlist', datafield: 'aibcTrans', width: 150 },
+            /*{ text: 'Blockchain Transaction', columntype: 'dropdownlist', datafield: 'aibcTrans', width: 150 },*/
         ]
+    });
+
+    // events
+    $("#jqxPendingFaultsgrid").on('cellbeginedit', function (event) {
+        var args = event.args;
+        $("#cellbegineditevent").text("Event Type: cellbeginedit, Column: " + args.datafield + ", Row: " + (1 + args.rowindex) + ", Value: " + args.value);
+    });
+
+    $("#jqxPendingFaultsgrid").on('cellendedit', function (event) {
+        var args = event.args;
+        $("#cellendeditevent").text("Event Type: cellendedit, Column: " + args.datafield + ", Row: " + (1 + args.rowindex) + ", Value: " + args.value);
     });
     
  // select or unselect rows when the checkbox is clicked.
-    $("#jqxPendingFaultsgrid").bind('cellendedit', function (event) {
+    /*$("#jqxPendingFaultsgrid").bind('cellendedit', function (event) {
         if (event.args.value) {
             $("#jqxPendingFaultsgrid").jqxGrid('selectrow', event.args.rowindex);
         }
         else {
             $("#jqxPendingFaultsgrid").jqxGrid('unselectrow', event.args.rowindex);
         }
-    });
+    });*/
     // get all selected records.
     $("#ProcessPendingFaults").click(function () {
-        var rows = $("#jqxPendingFaultsgrid").jqxGrid('selectedrowindexes');
+        /*var rows = $("#jqxPendingFaultsgrid").jqxGrid('selectedrowindexes');
         var selectedRecords = new Array();
         for (var m = 0; m < rows.length; m++) {
             var row = $("#jqxPendingFaultsgrid").jqxGrid('getrowdata', rows[m]);
             selectedRecords[selectedRecords.length] = row;
+            alert(row.id);
         }
-        console.log('selected rows :' + selectedRecords);
+        console.log('selected rows :' + selectedRecords);*/
+        var rowindex = $('#jqxPendingFaultsgrid').jqxGrid('getselectedrowindex');
+        var data = $('#jqxPendingFaultsgrid').jqxGrid('getrowdata', rowindex);
+        alert(data.id + " " + data.startDate + " " + data.endDate + " " + data.category + " " + data.subCategory + " " + data.description);  
+        var fault = {
+        		"faults" : [
+        			{
+        				"id" : data.id,        				
+        				"category" : data.category,
+        				"subCategory" : data.subCategory,
+        				"description" : data.description
+        			}
+        		]
+        	};
+        console.log(JSON.stringify(fault));
+        //send a rest client request
+    	sendFaultRequest(JSON.stringify(fault), 'process');        
     });    
 }
 

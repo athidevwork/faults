@@ -281,14 +281,14 @@
                 console.log(JSON.stringify(fault));
                 $('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(fault));
                 //send a rest client request
-            	sendFaultRequest(JSON.stringify(fault), 'create');
+            	sendFaultRequest(JSON.stringify(fault), 'save');
             });
 
             $('#GetFaultsByBuildingLocationUnit').on('click', function (event) {
             	//alert ("not yet implemented");
             	setupGetUnitFaultsGrid(building.label, location.label, unit.label); 
             	//getFaults();
-    			//setupGetAllFaultsGrid();  
+    			    //setupGetAllFaultsGrid();  
             });
  
             $('#clear').on('click', function (event) {
@@ -299,7 +299,7 @@
             
             $('#GetFaults').on('click', function (event) {
             	//getFaults();
-    			setupGetAllFaultsGrid();  
+    			    setupGetAllFaultsGrid();  
             });
 
             $('#GetPendingFaults').on('click', function (event) {
@@ -397,6 +397,10 @@
 		<p></p>
 		<div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
 			<div id="jqxPendingFaultsgrid"></div>
+      <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+      <div id="cellbegineditevent"></div>
+      <div style="margin-top: 10px;" id="cellendeditevent"></div>
+      </div>			
 		</div>	
 		<p></p>
     </div>

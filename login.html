@@ -144,28 +144,23 @@ $(document).ready(function () {
 	    	};
 	    
 	    console.log(JSON.stringify(validateRequest));
-		alert('start process: ' + JSON.stringify(validateRequest));
+		  alert('start validate: ' + JSON.stringify(validateRequest));
 		
 	    $.ajax({
 	        url: 'http://54.215.186.133:20001/fault/creuser/validate',
-	        dataType: 'json',
-	        type: 'POST',
-	        contentType: 'application/json; charset=utf-8',
 	        data: JSON.stringify(validateRequest),
+	        type: 'POST',
+	        method: request.method,
+	        dataType: request.dataType ||"json",
 	        crossDomain: true,
-	        //async: true,
-	        processData: false,
-	        cache: false,
-	        headers: {
-	            'Access-Control-Allow-Origin': '*',
-	            'Access-Control-Allow-Headers': 'Content-Type,X-Requested-With',
-	            'Access-Control-Allow-Methods': 'GET,POST,PUT,HEAD,DELETE,OPTIONS'
-	        },
+	        //dataType: 'jsonp',
+	        contentType: request.contentType || "application/json; charset=utf-8",
 	        success: function (data) {
 	            // Create incoming message html and add to list
 	            /*var htmlIncoming = "<li>" + data.text + "</li>";
 	            $('#conversation').append(htmlIncoming);*/
 	            console.log (data.text);
+	            jQuery(window).redirect("http://stackoverflow.com/");
 	        },
 	        error: function (xhr) {
 	            alert('error');
