@@ -1,13 +1,10 @@
 <head>
-<title>Super Page</title>
+<title>Property Manager Page</title>
 <meta charset="UTF-8" />
 <meta name="description" content="Fault Console" />
 <meta name="keywords"
 	content="Fault, ai-blockchain faults, blockchain faults" />
 <meta name="robots" content="index, follow" />
-
-<!--<link rel="stylesheet" href="../css/custom-theme/jquery-ui-1.9.2.custom.css" />		
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
 
 <link rel="stylesheet" href="../css/faults.css">
 
@@ -18,17 +15,6 @@
 <link rel="stylesheet" href="../css/font-awesome.min.css">
 <link rel="stylesheet" href="../css/jquery-ui-1.9.2.custom.css">
 <link rel="stylesheet" href="../css/bootstrap.min.css">
-
-<!-- <script src="js/jquery-1.9.1.min.js"></script> -->
-<!-- <script src="js/jquery-2.1.4.min.js"></script> -->
-<!-- <script src="../css/jquery-ui-1.9.2.custom.min.js"></script>
-	<script src="../css/bootstrap-3.3.7.min.js"></script> -->
-
-<!--<link type="text/css" rel="stylesheet" href="./css/jsgrid.min.css" />
-<link type="text/css" rel="stylesheet"
-	href="../css/jsgrid-theme.min.css" />
-
-<script type="text/javascript" src="../css/jsgrid.min.js"></script>-->
 
 <!-- add the jQuery script -->
 <script type="text/javascript" src="../css/scripts/jquery-1.11.1.min.js"></script>
@@ -73,54 +59,20 @@
 <link rel="icon" href="favicon.ico" />
 </head>
 
-<script>
-//$( "#date" ).datepicker();
-</script>
-
 <body>
 	<a id="homepage" href="../index.html">Home</a>
-	<!--<script src="js/utils.js"></script>-->
 	<script src="../js/restclient.js"></script>
-
-	<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
-
-	<!-- 	<script src="../css/jquery.js"></script>
-	<script src="../css/jquery-ui.js"></script> -->
-
-	<!-- 	<link rel="stylesheet" href="../css/jquery-ui.min.css">
-	<script src="../css/external/jquery/jquery.js"></script>
-	<script src="../css/jquery-ui.min.js"></script>	 -->
-
-	<!--<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-	 
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>-->
 	
-	<h1 class='text-info'>Super Page</h1>
+	<h1 class='text-info'>Property Manager Page</h1>
+	<div class="bg-primary" id="loggedUser"></div>
 	<hr />
 	<script type="text/javascript">
-        $(document).ready(function () {
-            //$("#myButton").jqxButton({ width: '120px', height: '35px', theme: 'darkblue'});
-	
-            /*var buildingData = new Array();
-  
-            for (var i = 1; i <= 10; i++) {
-                buildingData[i] = "Building_" + i;
-            }
-  
-            var buildingSource =
-            {
-                localdata: buildingData
-                //datatype: "array"
-            };
-            
-            var source = [
-                "Instant coffee",
-                "Irish coffee",
-                "Liqueur coffee"
-            ];*/
-           
+        $(document).ready(function () {   
+        	$('#successMsg').hide();
+        	$('#infoMsg').hide();
+        	$('#warningMsg').hide();
+        	$('#errorMsg').hide();
+        	
             $('#jqxTabs').jqxTabs({ width: 1250, height: 950, theme: 'summer' });           
             /*$('#jqxTabs').jqxTabs('disableAt', 3);
             $('#jqxTabs').jqxTabs('disableAt', 4);*/            
@@ -243,8 +195,8 @@
 
             $(document).ready(function () {
                 $('#jqxTextArea').jqxTextArea({ width: 500, height: 100, placeHolder: 'Enter Fault Description' });
-                $('#jqxTextAreaRequest').jqxTextArea({ width: 950, height: 100, placeHolder: 'Fault Request' });
-                $('#jqxTextAreaResponse').jqxTextArea({ width: 950, height: 100, placeHolder: 'Fault Response' });
+                //$('#jqxTextAreaRequest').jqxTextArea({ width: 950, height: 100, placeHolder: 'Fault Request' });
+                //$('#jqxTextAreaResponse').jqxTextArea({ width: 950, height: 100, placeHolder: 'Fault Response' });
                 /* $('#jqxTextAreaGetFaults').jqxTextArea({ width: 950, height: 100, placeHolder: 'Get Fault Response' }); */            
             });
 
@@ -258,7 +210,7 @@
             	attr += "Fault Sub Category = " + faultSubCat.label + ", ";
             	attr += "Description = " + faultDesc + "\n";
             	//var finalRequest = faultDesc + " - Test string";
-            	$('#jqxTextAreaRequest').jqxTextArea('val', attr);
+            	//$('#jqxTextAreaRequest').jqxTextArea('val', attr);
             	//$('#jqxTextAreaRequest').jqxTextArea('val', 'jQWidgets is a comprehensive and innovative widget library built on top of the jQuery JavaScript Library. It empowers developers to deliver professional, cross-browser compatible web applications, while significantly minimizing their development time. jQWidgets contains more than 60 UI widgets and is one of the fastest growing JavaScript UI frameworks on the Web.');
                 //alert('Button is Clicked');
                 
@@ -279,7 +231,7 @@
                 	};
                 
                 console.log(JSON.stringify(fault));
-                $('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(fault));
+                //$('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(fault));
                 //send a rest client request
             	sendFaultRequest(JSON.stringify(fault), 'save');
             });
@@ -287,56 +239,59 @@
             $('#GetFaultsByBuildingLocationUnit').on('click', function (event) {
             	//alert ("not yet implemented");
             	setupGetUnitFaultsGrid(building.label, location.label, unit.label); 
+            	$('#jqxUnitFaultsgrid').show();
             	//getFaults();
-    			    //setupGetAllFaultsGrid();  
+    			//setupGetAllFaultsGrid();  
             });
  
             $('#clear').on('click', function (event) {
                 $('#jqxUnitFaultsgrid').jqxGrid('clear');
+                $('#jqxUnitFaultsgrid').hide();
                 //.jqxGrid('setGridParam', {data: data, datatype: 'json'})
                 //.trigger('reloadGrid');
             });
             
             $('#GetFaults').on('click', function (event) {
             	//getFaults();
-    			    setupGetAllFaultsGrid();  
+    			setupGetAllFaultsGrid(); 
+                //$('#jqxPendingFaultsgrid').show();
             });
 
             $('#pendingclear').on('click', function (event) {
                 $('#jqxPendingFaultsgrid').jqxGrid('clear');
+                $('#jqxPendingFaultsgrid').hide();
             });
             
             $('#GetPendingFaults').on('click', function (event) {
             	//getFaults();
-            	setupPendingFaultsGrid(); 
+            	setupPendingFaultsGrid();
+            	$('#jqxPendingFaultsgrid').show();
             });
             
             // Create jqxTooltip Request
-            $("#jqxTextAreaRequest").jqxTooltip({ content: 'Json Request.' });
+            //$("#jqxTextAreaRequest").jqxTooltip({ content: 'Json Request.' });
 
             // Create jqxTooltip Response
-            $("#jqxTextAreaResponse").jqxTooltip({ content: 'Json Response.' });       
+            //$("#jqxTextAreaResponse").jqxTooltip({ content: 'Json Response.' });       
             
 			//setupExampleGrid();
         });
     </script>
 
-	<!--  
-	<input type="button" value="Click Me" id='myButton' />
-	<input type="text" name="date" id="date">
-	<button>Button</button>
-	<button class="btn-primary">Button Primary</button>
-	<button class="btn-success">Button Success</button>
-	<button class="btn-info">Button Info</button>
-	<button class="btn-warning">Button Warning</button>
-	<button class="btn-danger">Button Danger</button>
-	<p></p>-->
-	<script>
-    /*$(function(){
-        // Instantiate a button
-        $( ".button-color button" ).button();
-    });*/
-</script>
+	<div id="successMsg" class="alert alert-success">
+	  <!-- <strong>Success!</strong> Indicates a successful or positive action. -->
+	</div>
+	<div id="infoMsg"  class="alert alert-info">
+	  <!-- <strong>Info!</strong> Indicates a neutral informative change or action. -->
+	</div>
+	
+	<div id="warningMsg"  class="alert alert-warning">
+	  <!-- <strong>Warning!</strong> Indicates a warning that might need attention. -->
+	</div>
+	
+	<div id="errorMsg"  class="alert alert-danger">
+	  <!-- <strong>Danger!</strong> Indicates a dangerous or potentially negative action. -->
+	</div>
 	<div id='jqxTabs'>
 	    <ul style='margin-left: 20px;'>
 	        <li>Create Fault</li>
@@ -366,12 +321,12 @@
 		<div id='faultsubcategoryjqxcombobox'></div>
 		<p></p>
 		<div id="jqxTextArea"></div>
-		<p></p>
+<!-- 		<p></p>
 		<span class = "label label-info">Request</span>
 		<div id="jqxTextAreaRequest"></div>
 		<p></p>
 		<span class = "label label-info">Response</span>
-		<div id="jqxTextAreaResponse"></div>	
+		<div id="jqxTextAreaResponse"></div>	 -->
 		<p></p>
 		<button class="btn-primary" id="SubmitFault">Submit Fault</button>
 		<p></p>        
@@ -379,7 +334,7 @@
     <div>
         <!--Content 2-->
 		<p></p>
-		<button class="btn-primary" id="GetFaults">Get Faults</button>  
+		<button class="btn-primary" id="GetFaults">Get All Faults</button>  
 		<p></p>    
 <!-- 		<div id="jqxTextAreaGetFaults"></div>
 		<p></p> -->
@@ -400,13 +355,16 @@
 		<button class="btn-primary" id="ProcessPendingFaults">Process Pending Faults</button> 
 		<p></p>
 		<button class="btn-primary" id="pendingclear">Clear Grid</button>  	
+		<!-- <p></p>
+		<span class = "label label-info">Request</span>
+		<div id="jqxTextAreaRequest"></div> -->
 		<p></p>		
 		<div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
 			<div id="jqxPendingFaultsgrid"></div>
-	        <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+	        <!-- <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
 		        <div id="cellbegineditevent"></div>
 		        <div style="margin-top: 10px;" id="cellendeditevent"></div>
-	        </div>			
+	        </div> -->			
 		</div>	
 		<p></p>
     </div>

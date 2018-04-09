@@ -17,10 +17,12 @@ function loginUser (request) {
 	    success: function(response) {
 	    	console.log(response);
 	    	if (response.userType == 'super') {
+	    		$('#loggedUser').append("Welcome " + response.firstName + " " + response.lastName);
 	    		window.location.href = "super/index.html";
 	    		//window.open("super/index.html");
 	    	}
 	    	else {
+	    		$('#loggedUser').append("Welcome " + response.firstName + " " + response.lastName);
 	    		window.location.href = "tenant/index.html";
 	    		//window.open("tenant/index.html");
 	    	}
@@ -50,27 +52,29 @@ function sendFaultRequest(request, mode) {
 	    method: request.method,
 	    dataType: request.dataType ||"json",
 	    crossDomain: true,
-	    //dataType: 'jsonp',
 	    contentType: request.contentType || "application/json; charset=utf-8",
-	    //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        /*headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Authorization,Content-Type,X-Requested-With',
-            'Access-Control-Allow-Methods': 'GET,POST,PUT,HEAD,DELETE,OPTIONS'
-        },*/
         enctype: 'multipart/form-data',
-        //processData: false,  // tell jQuery not to process the data
-        //contentType: false,  // tell jQuery not to set contentType
 	    success: function(response) {
 	    	console.log(response);
 	    	//document.getElementById('jqxTextAreaResponse').innerHTML = response;
-	    	$('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(response));
+	    	//$('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(response));
+        	$('#successMsg').empty().append('Submit action completed successfully.');
+	    	window.setTimeout(function() {
+	    	    $("#successMsg").show().fadeTo(1000, 0).slideUp(1000, function(){
+	    	        $(this).remove(); 
+	    	    });
+	    	}, 2000);
 	    },
 	    beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 	    },
 	    error: function(xhr) {
-	    	console.log ("Failure occurred during processing request : " + xhr);
+        	$('#errorMsg').empty().append('Submit action completed successfully.');
+	    	window.setTimeout(function() {
+	    	    $("#errorMsg").show().fadeTo(1000, 0).slideUp(1000, function(){
+	    	        $(this).remove(); 
+	    	    });
+	    	}, 2000);
 	    }
 	});	
 }
@@ -130,10 +134,21 @@ function setupGetUnitFaultsGrid(building, location, unit) {
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
         	source.localdata = data;
-            //alert('source : ' + source.localdata);
+        	/*$('#successMsg').empty().append('Get Unit completed successfully.');
+	    	window.setTimeout(function() {
+	    	    $("#successMsg").show().fadeTo(1000, 0).slideUp(1000, function(){
+	    	        $(this).remove(); 
+	    	    });
+	    	}, 2000);*/
         },
         error: function (err) {
-        	alert('Error');
+        	//alert('Error');
+        	$('#errorMsg').empty().append('Get Unit failed.');
+	    	window.setTimeout(function() {
+	    	    $("#errorMsg").show().fadeTo(1000, 0).slideUp(1000, function(){
+	    	        $(this).remove(); 
+	    	    });
+	    	}, 2000);        	
         }
     });
     
@@ -195,7 +210,12 @@ function setupGetAllFaultsGrid() {
         	source.localdata = data;
         },
         error: function (err) {
-        	alert('Error');
+        	$('#errorMsg').empty().append('Get Unit failed.');
+	    	window.setTimeout(function() {
+	    	    $("#errorMsg").show().fadeTo(1000, 0).slideUp(1000, function(){
+	    	        $(this).remove(); 
+	    	    });
+	    	}, 2000); 
         }
     });
     
@@ -281,7 +301,7 @@ function setupPendingFaultsGrid() {
     source = {
         datatype: 'json',
         datafields: [
-            { name: 'available', type: 'bool' },        	
+            /*{ name: 'available', type: 'bool' },*/        	
             { name: 'id', type: 'number' },
             { name: 'startDate', type: 'string' },
             { name: 'endDate', type: 'string' },
@@ -305,7 +325,12 @@ function setupPendingFaultsGrid() {
         	source.localdata = data;
         },
         error: function (err) {
-        	alert('Error');
+        	$('#errorMsg').empty().append('Get Unit failed.');
+	    	window.setTimeout(function() {
+	    	    $("#errorMsg").show().fadeTo(1000, 0).slideUp(1000, function(){
+	    	        $(this).remove(); 
+	    	    });
+	    	}, 2000); 
         }
     });
     
@@ -328,23 +353,24 @@ function setupPendingFaultsGrid() {
         //autoshowfiltericon: true,
         //selectionmode: 'singlecell',
         editmode: 'click’',
-        selectionmode: 'multiplecellsadvanced',
+        //selectionmode: 'multiplecellsadvanced',
+        selectionmode: 'multiplerowsadvanced',
         columns: [
-            { text: '', datafield: 'available', columntype: 'checkbox', width: 30 },        	
+            /*{ text: '', datafield: 'available', columntype: 'checkbox', width: 30 },*/        	
             { text: 'ID', columntype: 'textbox', datafield: 'id', width: 30 },
             { text: 'Created Date', datafield: 'startDate', columntype: 'textbox', width: 140 },
-            { text: 'Processed Date', columntype: 'dropdownlist', datafield: 'endDate', width: 140 },
-            { text: 'Fault Category', columntype: 'dropdownlist', datafield: 'category', width: 140 },
-            { text: 'Fault Sub Category', columntype: 'dropdownlist', datafield: 'subCategory', width: 140 },
-            { text: 'Fault Description', columntype: 'dropdownlist', datafield: 'description', width: 150 },
-            { text: 'Fault Signature', columntype: 'dropdownlist', datafield: 'fSignature', width: 150 },
-            { text: 'Fault Status', columntype: 'dropdownlist', datafield: 'aibcStatus', width: 100 },
+            { text: 'Processed Date', columntype: 'textbox', datafield: 'endDate', width: 140 },
+            { text: 'Fault Category', columntype: 'textbox', datafield: 'category', width: 140 },
+            { text: 'Fault Sub Category', columntype: 'textbox', datafield: 'subCategory', width: 140 },
+            { text: 'Fault Description', columntype: 'textbox', datafield: 'description', width: 150 },
+            { text: 'Fault Signature', columntype: 'textbox', datafield: 'fSignature', width: 150 },
+            { text: 'Fault Status', columntype: 'textbox', datafield: 'aibcStatus', width: 100 },
             /*{ text: 'Blockchain Transaction', columntype: 'dropdownlist', datafield: 'aibcTrans', width: 150 },*/
         ]
     });
-
+    
     // events
-    $("#jqxPendingFaultsgrid").on('cellbeginedit', function (event) {
+    /*$("#jqxPendingFaultsgrid").on('cellbeginedit', function (event) {
         var args = event.args;
         $("#cellbegineditevent").text("Event Type: cellbeginedit, Column: " + args.datafield + ", Row: " + (1 + args.rowindex) + ", Value: " + args.value);
     });
@@ -352,9 +378,9 @@ function setupPendingFaultsGrid() {
     $("#jqxPendingFaultsgrid").on('cellendedit', function (event) {
         var args = event.args;
         $("#cellendeditevent").text("Event Type: cellendedit, Column: " + args.datafield + ", Row: " + (1 + args.rowindex) + ", Value: " + args.value);
-    });
+    });*/
     
- // select or unselect rows when the checkbox is clicked.
+    // select or unselect rows when the checkbox is clicked.
     /*$("#jqxPendingFaultsgrid").bind('cellendedit', function (event) {
         if (event.args.value) {
             $("#jqxPendingFaultsgrid").jqxGrid('selectrow', event.args.rowindex);
@@ -363,21 +389,48 @@ function setupPendingFaultsGrid() {
             $("#jqxPendingFaultsgrid").jqxGrid('unselectrow', event.args.rowindex);
         }
     });*/
+    
+
+    /*$("#enablehover").on('change', function (event) {
+        $("#grid").jqxGrid('enablehover', event.args.checked);
+    });*/
+
+    // display selected row index.
+    /*$("#jqxPendingFaultsgrid").on('rowselect', function (event) {
+        $("#selectrowindex").text(event.args.rowindex);
+    });
+
+    // display unselected row index.
+    $("#jqxPendingFaultsgrid").on('rowunselect', function (event) {
+        $("#unselectrowindex").text(event.args.rowindex);
+    });*/
+
     // get all selected records.
     $("#ProcessPendingFaults").click(function () {
-        /*var rows = $("#jqxPendingFaultsgrid").jqxGrid('selectedrowindexes');
+    	var faultsRequest = {
+    		    faults: []
+    		};
+        var rows = $("#jqxPendingFaultsgrid").jqxGrid('selectedrowindexes');
         var selectedRecords = new Array();
         for (var m = 0; m < rows.length; m++) {
             var row = $("#jqxPendingFaultsgrid").jqxGrid('getrowdata', rows[m]);
             selectedRecords[selectedRecords.length] = row;
-            alert(row.id);
+            //alert(row.id);
+            faultsRequest.faults.push({ 
+            	"id" : row.id,        				
+				"category" : row.category,
+				"subCategory" : row.subCategory,
+				"description" : row.description,
+				"fSignature" : row.fSignature, 
+				"aibcStatus" : row.aibcStatus
+            });
         }
-        console.log('selected rows :' + selectedRecords);*/
+        /*console.log('selected rows :' + selectedRecords);
         var rowindex = $('#jqxPendingFaultsgrid').jqxGrid('getselectedrowindex');
-        var data = $('#jqxPendingFaultsgrid').jqxGrid('getrowdata', rowindex);
-        alert(data.id + " " + data.startDate + " " + data.endDate + " " + data.category + " " 
-        		+ data.subCategory + " " + data.description + " " + data.aibcStatus);  
-        var fault = {
+        var data = $('#jqxPendingFaultsgrid').jqxGrid('getrowdata', rowindex);*/
+        /*alert(data.id + " " + data.startDate + " " + data.endDate + " " + data.category + " " 
+        		+ data.subCategory + " " + data.description + " " + data.aibcStatus);*/  
+        /*var faults = {
         		"faults" : [
         			{
         				"id" : data.id,        				
@@ -388,10 +441,12 @@ function setupPendingFaultsGrid() {
         				"aibcStatus" : data.aibcStatus        				
         			}
         		]
-        	};
-        console.log(JSON.stringify(fault));
+        	};*/
+        faultsJson = JSON.stringify(faultsRequest);
+        //$('#jqxTextAreaRequest').jqxTextArea('val', faultsJson);
+        console.log(faultsJson);
         //send a rest client request
-    	sendFaultRequest(JSON.stringify(fault), 'process');        
+    	sendFaultRequest(faultsJson, 'process');        
     });    
 }
 
