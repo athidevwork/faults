@@ -4,6 +4,7 @@ var rootURL = "http://54.215.186.133:20001/fault";
 function loginUser (request) {
 	var restUrl = rootURL + '/creuser/validate';
 
+	console.log ('Url : ' + restUrl + ", " + "Request : " + request);
 	$.ajax({
 	    url: restUrl,
 	    data: request,
@@ -11,30 +12,19 @@ function loginUser (request) {
 	    method: request.method,
 	    dataType: request.dataType ||"json",
 	    crossDomain: true,
-	    //dataType: 'jsonp',
 	    contentType: request.contentType || "application/json; charset=utf-8",
-	    /*method: request.method,
-	    dataType: request.dataType ||"json",
-	    crossDomain: true,
-	    //dataType: 'jsonp',
-	    contentType: request.contentType || "application/json; charset=utf-8",
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Requested-With',
-            'Access-Control-Allow-Methods': 'GET,POST,PUT,HEAD,DELETE,OPTIONS'
-        },
-        enctype: 'multipart/form-data',
-        processData: false,  // tell jQuery not to process the data
-        contentType: false,  // tell jQuery not to set contentType*/
+	    enctype: 'multipart/form-data',
 	    success: function(response) {
 	    	console.log(response);
-	    	//document.getElementById('jqxTextAreaResponse').innerHTML = response;
-	    	//$('#jqxTextAreaResponse').jqxTextArea('val', JSON.stringify(response));
-	    	jQuery(window).redirect("http://stackoverflow.com/");
+	    	if (response.userType == 'super') {
+	    		window.location.href = "super/index.html";
+	    		//window.open("super/index.html");
+	    	}
+	    	else {
+	    		window.location.href = "tenant/index.html";
+	    		//window.open("tenant/index.html");
+	    	}
 	    },
-	    /*beforeSend: function(xhr) {
-	        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-	    },*/
 	    error: function(xhr) {
 	    	console.log ("Failure occurred during processing user validation request : " + xhr);
 	    }
@@ -216,6 +206,7 @@ function setupGetAllFaultsGrid() {
     $('#jqxFaultsgrid').jqxGrid(
     {
         width: 1250,
+        height: 950,
         source: dataAdapter,
         editable: true,
         enabletooltips: true,
@@ -384,14 +375,17 @@ function setupPendingFaultsGrid() {
         console.log('selected rows :' + selectedRecords);*/
         var rowindex = $('#jqxPendingFaultsgrid').jqxGrid('getselectedrowindex');
         var data = $('#jqxPendingFaultsgrid').jqxGrid('getrowdata', rowindex);
-        alert(data.id + " " + data.startDate + " " + data.endDate + " " + data.category + " " + data.subCategory + " " + data.description);  
+        alert(data.id + " " + data.startDate + " " + data.endDate + " " + data.category + " " 
+        		+ data.subCategory + " " + data.description + " " + data.aibcStatus);  
         var fault = {
         		"faults" : [
         			{
         				"id" : data.id,        				
         				"category" : data.category,
         				"subCategory" : data.subCategory,
-        				"description" : data.description
+        				"description" : data.description,
+        				"fSignature" : data.fSignature, 
+        				"aibcStatus" : data.aibcStatus        				
         			}
         		]
         	};

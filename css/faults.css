@@ -3,15 +3,9 @@
 #unitjqxcombobox {float: left;}
 #faultcategoryjqxcombobox {float: left;}
 
-#GetPendingFaults { 
-	float: left; 
-	margin: 10px 10px 10px 0;
-}
-
-#ProcessPendingFaults { 
-	float: left; 
-	margin: 10px 10px 10px 0;
-}
+#GetPendingFaults {float: left; margin: 2px;}
+#ProcessPendingFaults {float: left; margin: 2px;}
+#pendingclear {float: left; margin: 2px;}
 
 #homepage {
 	float: right;

@@ -122,8 +122,8 @@
             ];*/
            
             $('#jqxTabs').jqxTabs({ width: 1250, height: 950, theme: 'summer' });           
-            $('#jqxTabs').jqxTabs('disableAt', 3);
-            $('#jqxTabs').jqxTabs('disableAt', 4);            
+            /*$('#jqxTabs').jqxTabs('disableAt', 3);
+            $('#jqxTabs').jqxTabs('disableAt', 4);*/            
             
             var buildingSource = [
                 "Building_1",
@@ -302,6 +302,10 @@
     			    setupGetAllFaultsGrid();  
             });
 
+            $('#pendingclear').on('click', function (event) {
+                $('#jqxPendingFaultsgrid').jqxGrid('clear');
+            });
+            
             $('#GetPendingFaults').on('click', function (event) {
             	//getFaults();
             	setupPendingFaultsGrid(); 
@@ -338,8 +342,8 @@
 	        <li>Create Fault</li>
 	        <li>Get Faults</li>
         	<li>Process Faults</li>
-	        <li>Tab 4</li>
-	        <li>Tab 5</li>
+<!-- 	        <li>Tab 4</li>
+	        <li>Tab 5</li> -->
 	    </ul>
     <div>
         <!--  Content 1 -->
@@ -395,21 +399,23 @@
 		<p></p>
 		<button class="btn-primary" id="ProcessPendingFaults">Process Pending Faults</button> 
 		<p></p>
+		<button class="btn-primary" id="pendingclear">Clear Grid</button>  	
+		<p></p>		
 		<div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
 			<div id="jqxPendingFaultsgrid"></div>
-      <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
-      <div id="cellbegineditevent"></div>
-      <div style="margin-top: 10px;" id="cellendeditevent"></div>
-      </div>			
+	        <div style="font-size: 12px; font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif; margin-top: 30px;">
+		        <div id="cellbegineditevent"></div>
+		        <div style="margin-top: 10px;" id="cellendeditevent"></div>
+	        </div>			
 		</div>	
 		<p></p>
     </div>
-    <div>
+<!--     <div>
         Content 4
     </div>
     <div>
         Content 5
-    </div>
+    </div> -->
 </div>
 
 	<!-- <div id="jsGrid"></div> -->
