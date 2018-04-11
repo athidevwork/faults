@@ -78,6 +78,56 @@
             $('#jqxTabs').jqxTabs('disableAt', 3);
             $('#jqxTabs').jqxTabs('disableAt', 4);*/            
             
+            // prepare the data
+            /*var buildingSource =
+            {
+            	datatype: "jsonp",
+            	crossdomain: "true",
+            	datafields: [
+            		{ name: 'id', type: 'string' },
+            		{ name: 'lookupCode', type: 'string' },
+            		{ name: 'lookupTypeCode', type: 'string' },
+            		{ name: 'parent', type: 'string' }
+            	],
+            	url: "http://54.215.186.133:20001/fault/lookup",
+            	data: {
+            		featureClass: "P",
+            		style: "full",
+            		maxRows: 50
+            	}
+            };
+              
+            var dataAdapter = new $.jqx.dataAdapter(buildingSource, {
+            	autoBind: true,
+            	loadComplete: function () {
+            		alert(dataAdapter.records.length);
+            	},
+            	loadError: function (xhr, status, error) { 
+            		alert(error + ', status ' + status);
+            	},
+            	beforeLoadComplete: function (records) {
+                    var data = new Array();
+                    // update the loaded records. Dynamically add EmployeeName and EmployeeID fields. 
+                    for (var i = 0; i < records.length; i++) {
+                        var buildingrecord = records[i];
+                        //buildingrecord.type = buildingrecord.lookupTypeCode;
+                        buildingrecord.number = buildingrecord.lookupCode;
+                        data.push(buildingrecord);
+                    }
+                    return data;
+                }	
+            });
+
+            $("#buildingjqxcombobox").jqxComboBox(
+          		{
+          			width: 200,
+          			height: 25,
+          			source: dataAdapter,
+          			selectedIndex: 0,
+          			displayMember: "lookupTypeCode",
+          			valueMember: "lookupCode"
+          		});*/
+            
             var buildingSource = [
                 "Building_1",
                 "Building_2",
@@ -89,11 +139,10 @@
                 "Building_8",
                 "Building_9",
 	        ];            
-            
+                  
             var building;
          	// Create a jqxComboBox
-            $("#buildingjqxcombobox").jqxComboBox({ source: buildingSource, selectedIndex: 0, width: '200px', height: '25px',});            
-            //$("#jqxcombobox").jqxComboBox('selectIndex', 1);
+            $("#buildingjqxcombobox").jqxComboBox({ source: buildingSource, selectedIndex: 0, width: '200px', height: '25px',});
             $('#buildingjqxcombobox').bind('select', function (event) {
                 var args = event.args;
                 building = $('#buildingjqxcombobox').jqxComboBox('getItem', args.index);

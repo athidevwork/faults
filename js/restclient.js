@@ -79,6 +79,26 @@ function sendFaultRequest(request, mode) {
 	});	
 }
 
+function getLookup() {
+	var restUrl = rootURL + '/lookup';
+	console.log('Url : ' + restUrl);
+	
+	$.ajax({
+	    url: restUrl,
+	    dataType: "json",
+	    crossDomain: true,
+	    dataType: 'jsonp',
+	    success: function(response) {
+	    	//console.log(response);
+	    	//document.getElementById('policydata').innerHTML = response;	    	
+	    	//$('#jqxTextAreaGetFaults').jqxTextArea('val', JSON.stringify(response));
+	    },
+	    error: function(xhr) {
+	    	console.log ("Failure occurred during get lookup : " + xhr);
+	    }
+	});	
+}
+
 function getFaults() {
 	var restUrl = rootURL + '/faults';
 	console.log('Url : ' + restUrl);
@@ -91,7 +111,7 @@ function getFaults() {
 	    success: function(response) {
 	    	//console.log(response);
 	    	//document.getElementById('policydata').innerHTML = response;	    	
-	    	$('#jqxTextAreaGetFaults').jqxTextArea('val', JSON.stringify(response));
+	    	//$('#jqxTextAreaGetFaults').jqxTextArea('val', JSON.stringify(response));
 	    },
 	    error: function(xhr) {
 	    	console.log ("Failure occurred during table generation : " + xhr);
