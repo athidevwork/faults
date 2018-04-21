@@ -77,7 +77,7 @@
             /*$('#jqxTabs').jqxTabs('disableAt', 3);
             $('#jqxTabs').jqxTabs('disableAt', 4);*/            
             
-            var buildingSource = [
+            /*var buildingSource = [
                 "Building_1",
                 "Building_2",
                 "Building_3",
@@ -87,11 +87,11 @@
                 "Building_7",
                 "Building_8",
                 "Building_9",
-	        ];            
+	        ];*/            
             
+	        getDropDownData('BUILDING', '#buildingjqxcombobox');
             var building;
-         	// Create a jqxComboBox
-            $("#buildingjqxcombobox").jqxComboBox({ source: buildingSource, selectedIndex: 0, width: '200px', height: '25px',});            
+            //$("#buildingjqxcombobox").jqxComboBox({ source: buildingSource, selectedIndex: 0, width: '200px', height: '25px',});            
             //$("#jqxcombobox").jqxComboBox('selectIndex', 1);
             $('#buildingjqxcombobox').bind('select', function (event) {
                 var args = event.args;
@@ -100,7 +100,7 @@
             });
             building = $('#buildingjqxcombobox').jqxComboBox('getItem', 0);
 
-            var locationSource = [
+            /*var locationSource = [
                 "1st_Floor",
                 "2nd_Floor",
                 "3rd_Floor",
@@ -110,11 +110,11 @@
                 "7th_Floor",
                 "8th_Floor",
                 "9th_Floor",
-	        ];            
+	        ];*/            
             
-         	// Create a jqxComboBox
+         	getDropDownData('LOCATION', '#locationjqxcombobox');
          	var location;
-            $("#locationjqxcombobox").jqxComboBox({ source: locationSource, selectedIndex: 0, width: '200px', height: '25px',});            
+            //$("#locationjqxcombobox").jqxComboBox({ source: locationSource, selectedIndex: 0, width: '200px', height: '25px',});            
             //$("#jqxcombobox").jqxComboBox('selectIndex', 1);
             $('#locationjqxcombobox').bind('select', function (event) {
                 var args = event.args;
@@ -123,7 +123,7 @@
             });  
             location = $('#locationjqxcombobox').jqxComboBox('getItem', 0);
 
-            var unitSource = [
+            /*var unitSource = [
                 "1A",
                 "1B",
                 "1C",
@@ -136,11 +136,11 @@
                 "3B",
                 "3C",
                 "3D",                
-	        ];            
+	        ];*/            
             
-         	// Create a jqxComboBox
+	        getDropDownData('UNIT', '#unitjqxcombobox');
          	var unit;
-            $("#unitjqxcombobox").jqxComboBox({ source: unitSource, selectedIndex: 0, width: '200px', height: '25px',});            
+            //$("#unitjqxcombobox").jqxComboBox({ source: unitSource, selectedIndex: 0, width: '200px', height: '25px',});            
             //$("#jqxcombobox").jqxComboBox('selectIndex', 1);
             $('#unitjqxcombobox').bind('select', function (event) {
                 var args = event.args;
@@ -149,7 +149,7 @@
             });
             unit = $('#unitjqxcombobox').jqxComboBox('getItem', 0);
             
-            var faultCategorySource = [
+            /*var faultCategorySource = [
                 "Roof_Leakage",
                 "Floor_Leakage",
                 "A/C Problem",
@@ -159,11 +159,11 @@
                 "Basement",
                 "Washer/Dryer",
                 "Refrigerator",
-	        ];            
+	        ];*/            
             
-         	// Create a jqxComboBox
+	        getDropDownData('CATEGORY', '#faultcategoryjqxcombobox');
          	var faultCat;
-            $("#faultcategoryjqxcombobox").jqxComboBox({ source: faultCategorySource, selectedIndex: 0, width: '200px', height: '25px',});
+            //$("#faultcategoryjqxcombobox").jqxComboBox({ source: faultCategorySource, selectedIndex: 0, width: '200px', height: '25px',});
             $('#faultcategoryjqxcombobox').bind('select', function (event) {
                 var args = event.args;
                 faultCat = $('#faultcategoryjqxcombobox').jqxComboBox('getItem', args.index);
@@ -171,7 +171,7 @@
             }); 
             faultCat = $('#faultcategoryjqxcombobox').jqxComboBox('getItem', 0);
 
-            var faultSubCategorySource = [
+            /*var faultSubCategorySource = [
                 "Shingles",
                 "Hardwood",
                 "Water_Heater",
@@ -181,11 +181,11 @@
                 "Powder_Room",
                 "Common_Bath",
                 "Add Freon",
-	        ];            
+	        ];*/            
             
-         	// Create a jqxComboBox
+	        getDependentDropDownData('SUBCATEGORY', faultCat.label, '#faultsubcategoryjqxcombobox');
          	var faultSubCat;
-            $("#faultsubcategoryjqxcombobox").jqxComboBox({ source: faultSubCategorySource, selectedIndex: 0, width: '200px', height: '25px',});
+            //$("#faultsubcategoryjqxcombobox").jqxComboBox({ source: faultSubCategorySource, selectedIndex: 0, width: '200px', height: '25px',});
             $('#faultsubcategoryjqxcombobox').bind('select', function (event) {
                 var args = event.args;
                 faultSubCat = $('#faultsubcategoryjqxcombobox').jqxComboBox('getItem', args.index);
@@ -200,6 +200,11 @@
                 /* $('#jqxTextAreaGetFaults').jqxTextArea({ width: 950, height: 100, placeHolder: 'Get Fault Response' }); */            
             });
 
+            $('#faultcategoryjqxcombobox').on('change', function (event) {
+        	    //alert('onChange');
+        	    getDependentDropDownData('SUBCATEGORY', faultCat.label, '#faultsubcategoryjqxcombobox');
+            });
+            
             $('#SubmitFault').on('click', function (event) {
             	var faultDesc = $('#jqxTextArea').val();
             	var attr = '';

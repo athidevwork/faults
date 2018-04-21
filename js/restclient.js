@@ -1,5 +1,6 @@
  // The root URL for the RESTful services
-var rootURL = "http://54.215.186.133:20001/fault";
+//var rootURL = "http://54.215.186.133:20001/fault";
+var rootURL = "http://54.183.99.105:20001/fault";
 
 function loginUser (request) {
 	var restUrl = rootURL + '/creuser/validate';
@@ -97,6 +98,95 @@ function getLookup() {
 	    	console.log ("Failure occurred during get lookup : " + xhr);
 	    }
 	});	
+}
+
+function getDropDownData(type, dropDownComboBox) {
+	var restUrl = rootURL + '/lookupbytype?type='+type;
+	
+    var buildingSource =
+    {
+    	datatype: "json",
+    	crossdomain: "true",
+    	datafields: [
+    		{ name: 'id', type: 'string' },
+    		{ name: 'lookupCode', type: 'string' },
+    		{ name: 'lookupTypeCode', type: 'string' },
+    		{ name: 'parent', type: 'string' }
+    	],
+    	url: restUrl,
+    	async: false,
+    	id: 'id',
+        formatdata: function (data) {
+        	//console.log(data);
+            //return "my data";
+        }            	
+    };
+      
+    var dataAdapter = new $.jqx.dataAdapter(buildingSource, {
+    	autoBind: true,
+    	loadComplete: function () {
+    	},
+    	loadError: function (xhr, status, error) { 
+    		alert(error + ', status ' + status);
+    	},
+    	beforeLoadComplete: function (records) {
+        }	
+    });
+
+    $(dropDownComboBox).jqxComboBox(
+  	{
+  			width: 200,
+  			height: 25,
+  			source: dataAdapter,
+  			selectedIndex: 0,
+  			displayMember: "lookupCode",
+  			valueMember: "lookupCode"
+  	});	
+}
+
+
+function getDependentDropDownData(type, parent, dropDownComboBox) {
+	var restUrl = rootURL + '/lookupbytype?type='+type+'&parent='+parent;
+	
+    var buildingSource =
+    {
+    	datatype: "json",
+    	crossdomain: "true",
+    	datafields: [
+    		{ name: 'id', type: 'string' },
+    		{ name: 'lookupCode', type: 'string' },
+    		{ name: 'lookupTypeCode', type: 'string' },
+    		{ name: 'parent', type: 'string' }
+    	],
+    	url: restUrl,
+    	async: false,
+    	id: 'id',
+        formatdata: function (data) {
+        	//console.log(data);
+            //return "my data";
+        }            	
+    };
+      
+    var dataAdapter = new $.jqx.dataAdapter(buildingSource, {
+    	autoBind: true,
+    	loadComplete: function () {
+    	},
+    	loadError: function (xhr, status, error) { 
+    		alert(error + ', status ' + status);
+    	},
+    	beforeLoadComplete: function (records) {
+        }	
+    });
+
+    $(dropDownComboBox).jqxComboBox(
+  	{
+  			width: 200,
+  			height: 25,
+  			source: dataAdapter,
+  			selectedIndex: 0,
+  			displayMember: "lookupCode",
+  			valueMember: "lookupCode"
+  	});	
 }
 
 function getFaults() {
