@@ -517,6 +517,12 @@ function setupPendingFaultsGrid() {
 
     // get all selected records.
     $("#ProcessPendingFaults").click(function () {
+    	$('#infoMsg').empty().append('Starting to process faults...');
+    	window.setTimeout(function() {
+    	    $("#infoMsg").show().fadeTo(2000, 0).slideUp(2000, function(){
+    	        $(this).remove(); 
+    	    });
+    	}, 0);
     	var faultsRequest = {
     		    faults: []
     		};
